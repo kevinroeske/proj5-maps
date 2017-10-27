@@ -1,0 +1,17 @@
+/*
+ * Style sheet for the map. Super simple
+ *
+ * Author: Kevin Roeske
+ * Revised:  
+ */
+
+body {
+
+	text-align:center;
+	background: #EEE; 
+	color: rgb(80,80,80);
+	font: normal 85% "Lucida Sans Unicode",sans-serif;
+	margin: 0;
+}
+
+#mymap { height: 300px; }
