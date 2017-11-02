@@ -55,7 +55,7 @@ def fake_cli_args():
     with a compatible structure.
     """
     log.debug("-> Fake cli args")
-    parser = argparse.ArgumentParser(description="CIS 322 Syllabus Server")
+    parser = argparse.ArgumentParser(description="CIS 322 Interactive Map")
     cli_args = parser.parse_args([])
     log.debug("<- Command line args: {}".format(cli_args))
     return cli_args

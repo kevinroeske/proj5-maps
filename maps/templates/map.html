@@ -9,6 +9,13 @@
   <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"
    integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log=="
    crossorigin=""></script>
+  <script src="https://unpkg.com/esri-leaflet@2.0.8"></script>
+  <link rel="stylesheet" href="https://unpkg.com/esri-leaflet-geocoder@2.2.6/dist/esri-leaflet-geocoder.css"
+    integrity="sha512-v5YmWLm8KqAAmg5808pETiccEohtt8rPVMGQ1jA6jqkWVydV5Cuz3nJ9fQ7ittSxvuqsvI9RSGfVoKPaAJZ/AQ=="
+    crossorigin="">
+  <script src="https://unpkg.com/esri-leaflet-geocoder@2.2.6/dist/esri-leaflet-geocoder.js"
+    integrity="sha512-NE6FicJEhXDHZNxWrGwC4gdaxb7iOMsp7+bQSintY+stx4GpoUpNAH+yuiE1uduT5inQCPPmH0lf0cdjJFfwcA=="
+    crossorigin=""></script>
 </head>
 
 <body>
@@ -16,14 +23,33 @@
  <div id="mymap" style="width: 1350px; height: 550px;" align="center"></div>
 
   <script>
-   var map = L.map('mymap').setView([44.052, -123.086], 13);
+   var map = L.map('mymap').setView([44.0460, -123.0711], 17);
 
    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoia3JvZXNrZTQiLCJhIjoiY2o5OTRwN3Z2MGhyajJxcGF3Mjc2OG5zeCJ9.qRIABUws5QZvSQvtcBbyGg', {
     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
     maxZoom: 18,
     id: 'mapbox.streets'
 }).addTo(map);
-  </script>
+//  var tiles = L.esri.basemapLayer("Streets").addTo(map);
+  var poi = {{ g.poi | safe }};
+  var latlist = poi[0];
+  var longlist = poi[1]
+  var i = 0;
+  for (stuff in latlist){
+	var templat = latlist[i];
+	var templon = longlist[i];
+	var marker = L.marker([templat, templon]).addTo(map);
+	marker.bindPopup("<b>I Have a Class</b><br>In This Building");
+	i++;
+  }
+  var geocodeService = L.esri.Geocoding.geocodeService();
+
+  map.on('click', function(e) {
+    geocodeService.reverse().latlng(e.latlng).run(function(error, result) {
+      L.marker(result.latlng).addTo(map).bindPopup(result.address.Match_addr).openPopup();
+    });
+  });
+ </script>
 
 
 

@@ -11,7 +11,7 @@ import flask
 import logging
 
 # Our own modules
-import pre        # Preprocess schedule file
+import pre        # Preprocess poi file
 import config     # Configure from configuration files or command line
 
 
@@ -27,11 +27,11 @@ else:
 
 if configuration.DEBUG:
     app.logger.setLevel(logging.DEBUG)
-
+app.secret_key = configuration.SECRET_KEY
 # Pre-processed schedule is global, so be careful to update
 # it atomically in the view functions.
 #
-#points_of_interest = pre.process(open(configuration.POI))
+points_of_interest = pre.process(open(configuration.POI))
 
 
 ###
@@ -45,7 +45,7 @@ if configuration.DEBUG:
 def index():
     """Main application page; most users see only this"""
     app.logger.debug("Main page entry")
-#    flask.g.poi = points_of_interest  # To be accessible in Jinja2 on page
+    flask.g.poi = points_of_interest  # To be accessible in Jinja2 on page
     return flask.render_template('map.html')
 
 
